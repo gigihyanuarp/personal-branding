@@ -25,31 +25,31 @@ foreach ($migrationFiles as $file) {
 echo "✅ Migrations completed!\n\n";
 
 // Create panel user
-echo "👤 Creating admin user...\n";
+echo "👤 Creating panel user...\n";
 
 $panelEmail = 'panel@example.com';
 $panelPassword = getenv('PANEL_PASSWORD');
-if (!$adminPassword) {
+if (!$panelPassword) {
     fwrite(STDERR, "ERROR: set PANEL_PASSWORD di .env sebelum menjalankan seeder.\n");
     exit(1);
 }
 $panelName = 'Gigih';
 
-$existingPanel = Panel::where('email', $adminEmail)->first();
+$existingPanel = Panel::where('email', $panelEmail)->first();
 
-if ($existingAdmin) {
-    echo "  Panel user already exists: {$adminEmail}\n";
+if ($existingPanel) {
+    echo "  Panel user already exists: {$panelEmail}\n";
 } else {
     $panel = new Panel();
-    $panel->email = $adminEmail;
-    $panel->setPassword($adminPassword);
-    $panel->name = $adminName;
+    $panel->email = $panelEmail;
+    $panel->setPassword($panelPassword);
+    $panel->name = $panelName;
     $panel->save();
     
-    echo "  ✅ Admin created successfully!\n";
-    echo "  📧 Email: {$adminEmail}\n";
-    echo "  🔑 Password: {$adminPassword}\n";
+    echo "  ✅ Panel user created successfully!\n";
+    echo "  📧 Email: {$panelEmail}\n";
+    echo "  🔑 Password: {$panelPassword}\n";
     echo "  ⚠️  IMPORTANT: Change the password after first login!\n";
 }
 
-echo "\n🎉 Setup complete! You can now access the admin panel at /admin/login\n";
+echo "\n🎉 Setup complete! You can now access the panel at /panel/login (path tersedia di .env)\n";
