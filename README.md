@@ -51,7 +51,7 @@ personal-branding/
 │   ├── app.js                  # Entry: load .env → createApp() → listen()
 │   ├── routes/
 │   │   ├── public.js           # Route publik: /, /about, /portfolio, /contact
-│   │   ├── panel.js            # Route admin: login, dashboard, portfolio CRUD, messages
+│   │   ├── panel.js            # Route panel: login, dashboard, portfolio CRUD, messages
 │   │   └── errors.js           # 404 & 500 handler
 │   ├── middleware/
 │   │   ├── auth.js             # authGuard cek session panelLoggedIn
@@ -96,9 +96,9 @@ npm start   # atau: node server.js
 #   Network: http://YOUR_LAN_IP:3000 (LAN)
 #   Tunnel:  https://gigihgyp.my.id (via Cloudflare Zero Trust)
 
-# 6. Login panel (path rahasia, lihat .env)
+# 6. Login panel (path tersedia di .env)
 #   Email: panel@example.com
-#   Password: YOUR_DB_PASSWORD  (default dari .env.example, ganti dulu!)
+#   Password: (isi di .env, ganti default!)
 ```
 
 ### Script backup manual (opsional)
@@ -121,10 +121,10 @@ sha256sum ~/backups/db-$DATE.sql ~/backups/files-$DATE.tar.gz
 
 ## 🛠️ Development — Menambah Fitur
 
-### Menambah Portfolio Baru (via Panel)
+### Menambah Portfolio Baru (via Panel Internal)
 
-1. Buka `https://gigihgyp.my.id/panel/login (path rahasia)`
-2. Login dengan kredensial panel
+1. Buka URL panel (path tersedia di .env, tidak dipublikasikan)
+2. Login dengan kredensial (lihat .env)
 3. Klik **Portfolio** → **+ Tambah Portfolio**
 4. Isi form: Judul, Slug, Deskripsi, Teknologi, URL, Gambar (max 2MB)
 5. Status: `Published` atau `Draft`
@@ -135,7 +135,7 @@ sha256sum ~/backups/db-$DATE.sql ~/backups/files-$DATE.tar.gz
 1. Buka `/contact`
 2. Isi: Nama, Email, Subjek, Pesan
 3. Klik **Kirim Pesan** → data ke `storage/logs/messages.jsonl`
-4. Di panel `/panel/messages` → bisa dilihat, ditandai baca, atau dihapus
+4. Di panel pesan → bisa dilihat, ditandai baca, atau dihapus
 
 ### Menambah Validasi di Form
 
@@ -147,7 +147,7 @@ Semua validasi dijalankan server-side di `server/routes/public.js`. Client-side 
 
 ### Menghapus Pesan di Panel
 
-1. Buka `/panel/messages` (butuh login panel)
+1. Buka panel pesan (butuh login)
 2. Temukan pesan yang ingin dihapus
 3. Klik tombol **Hapus** (icon tangות)
 4. Konfirmasi `Yakin ingin menghapus pesan ini?`
