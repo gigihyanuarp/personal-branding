@@ -41,9 +41,9 @@ app.listen(PORT, HOST, () => {
   if (lanIp) console.log(`🌐 Network:  http://${lanIp}:${PORT}`);
   console.log(`📁 Document Root: ${path.join(__dirname, 'public')}`);
   console.log('');
-  console.log('⚠️  Login Admin:');
-  console.log(`   Email: ${process.env.ADMIN_USER || 'admin@example.com'}`);
-  console.log('   (password dari env ADMIN_PASS / default)');
+  console.log('⚠️  Login Panel:');
+  console.log(`   Email: ${process.env.PANEL_USER || 'panel@example.com'}`);
+  console.log('   (password dari env PANEL_PASS / default)');
   console.log('');
   console.log('Tekan Ctrl+C untuk menghentikan server');
   console.log('========================================');

@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Core\Database;
-use App\Model\Admin;
+use App\Model\Panel;
 
 // Initialize database
 Database::init();
@@ -24,27 +24,27 @@ foreach ($migrationFiles as $file) {
 
 echo "✅ Migrations completed!\n\n";
 
-// Create admin user
+// Create panel user
 echo "👤 Creating admin user...\n";
 
-$adminEmail = 'admin@example.com';
-$adminPassword = getenv('ADMIN_PASSWORD');
+$panelEmail = 'panel@example.com';
+$panelPassword = getenv('PANEL_PASSWORD');
 if (!$adminPassword) {
-    fwrite(STDERR, "ERROR: set ADMIN_PASSWORD di .env sebelum menjalankan seeder.\n");
+    fwrite(STDERR, "ERROR: set PANEL_PASSWORD di .env sebelum menjalankan seeder.\n");
     exit(1);
 }
-$adminName = 'Gigih';
+$panelName = 'Gigih';
 
-$existingAdmin = Admin::where('email', $adminEmail)->first();
+$existingPanel = Panel::where('email', $adminEmail)->first();
 
 if ($existingAdmin) {
-    echo "  Admin user already exists: {$adminEmail}\n";
+    echo "  Panel user already exists: {$adminEmail}\n";
 } else {
-    $admin = new Admin();
-    $admin->email = $adminEmail;
-    $admin->setPassword($adminPassword);
-    $admin->name = $adminName;
-    $admin->save();
+    $panel = new Panel();
+    $panel->email = $adminEmail;
+    $panel->setPassword($adminPassword);
+    $panel->name = $adminName;
+    $panel->save();
     
     echo "  ✅ Admin created successfully!\n";
     echo "  📧 Email: {$adminEmail}\n";
