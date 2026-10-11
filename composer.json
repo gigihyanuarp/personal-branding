@@ -1,0 +1,30 @@
+{
+    "name": "your-user/personal-branding",
+    "description": "Personal Branding Website - Professional IT Support Portfolio",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "vlucas/phpdotenv": "^5.5",
+        "illuminate/database": "^10.0",
+        "illuminate/events": "^10.0",
+        "respect/validation": "^2.2",
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "src/Core/helpers.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

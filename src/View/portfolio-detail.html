@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Setup Server Linux Production - Gigih Portfolio">
+    <title>Setup Server Linux Production | Gigih</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>
+/* gyp-theme-init: tema otomatis dari device (prefers-color-scheme), cegah kedip */
+try{document.documentElement.setAttribute("data-theme",window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}catch(e){}
+</script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="/" class="logo" aria-label="Home">GIGIH YANUAR PRABAWA</a>
+            <a href="#" class="mobile-menu-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/about">Tentang</a></li>
+                <li><a href="/portfolio">Portfolio</a></li>
+                <li><a href="/contact">Kontak</a></li>
+            </ul>
+</nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="/">Home</a>
+                    <span>/</span>
+                    <a href="/portfolio">Portfolio</a>
+                    <span>/</span>
+                    <span data-slot="breadcrumb-title">Detail</span>
+                </nav>
+                <h1 data-slot="title">Detail Portfolio</h1>
+            </div>
+        </section>
+
+        <section class="project-detail">
+            <div class="container">
+                <div class="project-detail-grid">
+                    <div class="project-main">
+                        <div class="project-hero-image" data-slot="hero-image" hidden></div>
+
+                        <div class="project-description">
+                            <h2>Deskripsi Proyek</h2>
+                            <div class="prose" data-slot="description"></div>
+                        </div>
+
+                        <div class="project-technologies" data-slot="technologies-block" hidden>
+                            <h2>Teknologi yang Digunakan</h2>
+                            <div class="tech-tags" data-slot="technologies"></div>
+                        </div>
+                    </div>
+
+                    <aside class="project-sidebar">
+                        <div class="project-meta-card">
+                            <h3>Detail Proyek</h3>
+                            <dl class="meta-list">
+                                <dt>Status</dt>
+                                <dd><span class="badge badge-success" data-slot="status">Published</span></dd>
+                                <dt>Dibuat</dt>
+                                <dd data-slot="created">—</dd>
+                                <dt>Diperbarui</dt>
+                                <dd data-slot="updated">—</dd>
+                            </dl>
+                        </div>
+
+                        <div class="project-links-card" data-slot="links-card" hidden>
+                            <h3>Tautan</h3>
+                            <div class="link-buttons" data-slot="links"></div>
+                        </div>
+
+                        <div class="project-back">
+                            <a href="/portfolio" class="btn btn-ghost btn-block">← Kembali ke Portfolio</a>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>GIGIH</h3>
+                    <p>IT Support Specialist yang berfokus pada solusi infrastruktur, keamanan jaringan, dan otomatisasi sistem.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigasi</h4>
+                    <ul>
+                        <li><a href="/about">Tentang Saya</a></li>
+                        <li><a href="/portfolio">Portfolio</a></li>
+                        <li><a href="/contact">Kontak</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Kontak</h4>
+                    <p>Email: your-email@example.com</p>
+                    <p>Lokasi: Indonesia</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gigih. Dibangun dengan PHP Native.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/app.js"></script>
+</body>
+</html>

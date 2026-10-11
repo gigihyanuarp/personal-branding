@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Gigih</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%); padding: 2rem; }
+        .login-card { width: 100%; max-width: 420px; background: white; border-radius: 12px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); padding: 2.5rem; border: 1px solid #e2e8f0; }
+        .login-header { text-align: center; margin-bottom: 2rem; }
+        .login-header h1 { font-size: 1.5rem; color: #1e40af; margin-bottom: 0.5rem; }
+        .login-header p { color: #64748b; }
+        .alert { padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 500; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #1e293b; }
+        input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; }
+        input:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px #dbeafe; }
+        .btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; font-weight: 500; border-radius: 8px; border: none; cursor: pointer; width: 100%; font-size: 1rem; }
+        .btn-primary { background: #1e40af; color: white; }
+        .btn-primary:hover { background: #1e3a8a; }
+        .btn-ghost { background: transparent; color: #64748b; border: 1px solid #e2e8f0; margin-top: 1rem; }
+        .btn-ghost:hover { background: #f1f5f9; color: #1e293b; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <h1>Admin Panel</h1>
+            <p>Masuk untuk mengelola portfolio</p>
+        </div>
+        
+        <form action="/admin/login" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Masuk</button>
+        </form>
+        
+        <div style="margin-top: 1.5rem; text-align: center;">
+            <a href="/" class="btn btn-ghost">← Kembali ke Website</a>
+        </div>
+    </div>
+</body>
+</html>

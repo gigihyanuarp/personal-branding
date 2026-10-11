@@ -1,0 +1,16 @@
+[Unit]
+Description=Personal Branding Website (Node.js/Express)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/personal-branding
+EnvironmentFile=%h/personal-branding/.env
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:%h/personal-branding/server.log
+StandardError=append:%h/personal-branding/server.log
+
+[Install]
+WantedBy=default.target

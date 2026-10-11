@@ -1,0 +1,35 @@
+# Dependencies
+/node_modules
+/vendor
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs & runtime data
+*.log
+server.log
+storage/logs/*.jsonl
+storage/logs/*.log
+storage/cache/*
+
+# Uploads (user-generated content)
+public/assets/uploads/*
+!public/assets/uploads/.gitkeep
+
+# Composer binary (installed locally)
+composer.phar
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# IDE
+.idea/
+.vscode/
+
+# Arsip lokal (tidak untuk repo)
+.archive/

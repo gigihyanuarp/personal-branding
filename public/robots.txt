@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin
+Disallow: /storage
+Disallow: /migrations
+
+Sitemap: https://gigihgyp.my.id/sitemap.xml
