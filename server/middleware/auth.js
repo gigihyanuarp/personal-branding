@@ -1,20 +1,20 @@
 /**
- * Middleware: proteksi halaman admin berbasis session.
+ * Middleware: proteksi halaman panel berbasis session.
  */
-function isAdminLoggedIn(req) {
-  return !!(req.session && req.session.adminLoggedIn === true);
+function isPanelLoggedIn(req) {
+  return !!(req.session && req.session.panelLoggedIn === true);
 }
 
 /** Redirect ke login jika belum terautentikasi */
 function authGuard(req, res, next) {
-  if (isAdminLoggedIn(req)) return next();
-  return res.redirect('/admin/login');
+  if (isPanelLoggedIn(req)) return next();
+  return res.redirect('/panel/login');
 }
 
 /** Redirect ke dashboard jika SUDAH login (untuk halaman login) */
 function guestOnly(req, res, next) {
-  if (isAdminLoggedIn(req)) return res.redirect('/admin/dashboard');
+  if (isPanelLoggedIn(req)) return res.redirect('/panel/dashboard');
   return next();
 }
 
-module.exports = { isAdminLoggedIn, authGuard, guestOnly };
+module.exports = { isPanelLoggedIn, authGuard, guestOnly };

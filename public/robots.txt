@@ -1,5 +1,5 @@
 User-agent: *
-Disallow: /admin
+Disallow: /panel
 Disallow: /storage
 Disallow: /migrations
 

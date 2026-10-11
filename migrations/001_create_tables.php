@@ -38,8 +38,8 @@ return function () {
         $table->index(['is_read', 'created_at']);
     });
 
-    // Admins table
-    Capsule::schema()->create('admins', function (Blueprint $table) {
+    // Users table
+    Capsule::schema()->create('users', function (Blueprint $table) {
         $table->id();
         $table->string('email')->unique();
         $table->string('password');

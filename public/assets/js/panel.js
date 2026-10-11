@@ -1,5 +1,5 @@
 // ========================================
-// ADMIN JAVASCRIPT
+// PANEL JAVASCRIPT
 // ========================================
 
 (function() {
@@ -65,7 +65,7 @@
             modalBody.innerHTML = '<div class="loading">Memuat pesan...</div>';
             
             try {
-                const response = await fetch(`/admin/messages/${messageId}/view`);
+                const response = await fetch(`/panel/messages/${messageId}/view`);
                 if (response.ok) {
                     const html = await response.text();
                     modalBody.innerHTML = html;
@@ -275,9 +275,9 @@
 })();
 
 // ========================================
-// ADMIN TOAST STYLES (injected)
+// PANEL TOAST STYLES (injected)
 // ========================================
-const adminToastStyles = `
+const panelToastStyles = `
 .toast {
     display: flex;
     align-items: center;
@@ -336,6 +336,6 @@ const adminToastStyles = `
 }
 `;
 
-const adminStyleSheet = document.createElement('style');
-adminStyleSheet.textContent = adminToastStyles;
-document.head.appendChild(adminStyleSheet);
+const panelStyleSheet = document.createElement('style');
+panelStyleSheet.textContent = panelToastStyles;
+document.head.appendChild(panelStyleSheet);

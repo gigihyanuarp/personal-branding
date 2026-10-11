@@ -9,7 +9,7 @@ const rateLimit = require('express-rate-limit');
 
 const visitorLog = require('./middleware/visitorLog');
 const publicRoutes = require('./routes/public');
-const adminRoutes = require('./routes/admin');
+const panelRoutes = require('./routes/panel');
 const { notFound, serverError } = require('./routes/errors');
 
 function createApp() {
@@ -31,7 +31,7 @@ function createApp() {
   });
   app.use(limiter);
 
-  // Session admin
+  // Session panel
   app.use(session({
     secret: process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex'),
     resave: false,
@@ -39,12 +39,12 @@ function createApp() {
     cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax' }
   }));
 
-  // Log kunjungan publik (GET non-asset non-admin)
+  // Log kunjungan publik (GET non-asset non-panel)
   app.use(visitorLog);
 
-  // Route publik → admin
+  // Route publik → panel
   app.use('/', publicRoutes);
-  app.use('/admin', adminRoutes);
+  app.use('/panel', panelRoutes);
 
   // 404 + error handler (harus paling akhir)
   app.use(notFound);

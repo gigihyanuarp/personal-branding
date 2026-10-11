@@ -1,9 +1,9 @@
 /**
- * Route admin: login, logout, dashboard, portfolio, messages, visitors.
- * Semua kecuali /admin/login dilindungi authGuard.
+ * Route panel: login, logout, dashboard, portfolio, messages, visitors.
+ * Semua kecuali /panel/login dilindungi authGuard.
  */
 const express = require('express');
-const { authGuard, guestOnly, isAdminLoggedIn } = require('../middleware/auth');
+const { authGuard, guestOnly, isPanelLoggedIn } = require('../middleware/auth');
 const { readVisitorStats } = require('../utils/visitorLog');
 const { readMessages, markMessageRead, deleteMessage } = require('../utils/messageLog');
 const { escHtml, formatWIB } = require('../utils/helpers');
@@ -11,8 +11,8 @@ const { readPortfolios, createPortfolio, updatePortfolio, deletePortfolio, findP
 
 const router = express.Router();
 
-const ADMIN_USER = process.env.ADMIN_USER || 'admin@example.com';
-const ADMIN_PASS = process.env.ADMIN_PASS || '';
+const PANEL_USER = process.env.PANEL_USER || 'panel@example.com';
+const PANEL_PASS = process.env.PANEL_PASS || '';
 
 function dashboardStats() {
   const vs = readVisitorStats();
@@ -89,7 +89,7 @@ function normalizePortfolio(body) {
 function layout(title, body) {
   return `<!DOCTYPE html>
 <html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${escHtml(title)} | Admin Gigih</title>
+<title>${escHtml(title)} | Gigih</title>
 <style>
 :root{--primary:#1e40af;--primary-hover:#1e3a8a;--bg:#f8fafc;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -145,18 +145,18 @@ function portfolioForm(p, action, submitLabel) {
     </select>
     <div style="margin-top:1rem;display:flex;gap:.5rem">
       <button class="btn" type="submit">${escHtml(submitLabel)}</button>
-      <a class="btn" href="/admin/portfolio" style="background:#64748b">Batal</a>
+      <a class="btn" href="/panel/portfolio" style="background:#64748b">Batal</a>
     </div>
   </form>`;
 }
 
 // --- Login ---
 router.get('/login', guestOnly, (req, res) => {
-  res.send(layout('Masuk Admin', `
+  res.send(layout('Masuk', `
     <div class="login">
-      <h2>Masuk Admin</h2>
+      <h2>Masuk</h2>
       ${req.query.error ? '<p class="err">Email atau password salah.</p>' : ''}
-      <form method="POST" action="/admin/login">
+      <form method="POST" action="/panel/login">
         <label>Email</label><input type="email" name="email" required autocomplete="username">
         <label>Password</label><input type="password" name="password" required autocomplete="current-password">
         <button class="btn" type="submit" style="margin-top:.75rem">Masuk</button>
@@ -166,16 +166,16 @@ router.get('/login', guestOnly, (req, res) => {
 
 router.post('/login', guestOnly, (req, res) => {
   const { email, password } = req.body || {};
-  if (email === ADMIN_USER && password === ADMIN_PASS) {
-    req.session.adminLoggedIn = true;
-    req.session.adminEmail = email;
-    return res.redirect('/admin/dashboard');
+  if (email === PANEL_USER && password === PANEL_PASS) {
+    req.session.panelLoggedIn = true;
+    req.session.panelEmail = email;
+    return res.redirect('/panel/dashboard');
   }
-  return res.redirect('/admin/login?error=1');
+  return res.redirect('/panel/login?error=1');
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy(() => res.redirect('/admin/login'));
+  req.session.destroy(() => res.redirect('/panel/login'));
 });
 
 // --- Dashboard ---
@@ -196,12 +196,12 @@ router.get('/dashboard', authGuard, (req, res) => {
   res.send(layout('Dashboard', `
     <h2>Dashboard</h2>
     <div class="nav">
-      <a href="/admin/dashboard">Dashboard</a>
-      <a href="/admin/visitors">Pengunjung</a>
-      <a href="/admin/messages">Pesan (${s.unread})</a>
-      <a href="/admin/portfolio">Portfolio</a>
+      <a href="/panel/dashboard">Dashboard</a>
+      <a href="/panel/visitors">Pengunjung</a>
+      <a href="/panel/messages">Pesan (${s.unread})</a>
+      <a href="/panel/portfolio">Portfolio</a>
       <a href="/" target="_blank">Lihat Situs</a>
-      <a href="/admin/logout">Keluar</a>
+      <a href="/panel/logout">Keluar</a>
     </div>
     <div class="grid">
       <div class="card"><div class="v">${s.visitors.total}</div><div class="l">Total Kunjungan</div></div>
@@ -213,7 +213,7 @@ router.get('/dashboard', authGuard, (req, res) => {
     <table><thead><tr><th>Halaman</th><th>Jumlah</th></tr></thead><tbody>${pages}</tbody></table>
     <h3 style="margin:1.5rem 0 .5rem">Pesan Terbaru</h3>
     <table><thead><tr><th>Nama</th><th>Email</th><th>Subjek</th><th>Status</th><th>Waktu</th></tr></thead><tbody>${msgRows}</tbody></table>
-    <p><a class="btn" href="/admin/messages">Lihat Semua Pesan</a></p>`));
+    <p><a class="btn" href="/panel/messages">Lihat Semua Pesan</a></p>`));
 });
 
 // --- Visitors ---
@@ -232,11 +232,11 @@ router.get('/visitors', authGuard, (req, res) => {
   res.send(layout('Pengunjung', `
     <h2>Pengunjung</h2>
     <div class="nav">
-      <a href="/admin/dashboard">Dashboard</a>
-      <a href="/admin/visitors">Pengunjung</a>
-      <a href="/admin/messages">Pesan</a>
-      <a href="/admin/portfolio">Portfolio</a>
-      <a href="/admin/logout">Keluar</a>
+      <a href="/panel/dashboard">Dashboard</a>
+      <a href="/panel/visitors">Pengunjung</a>
+      <a href="/panel/messages">Pesan</a>
+      <a href="/panel/portfolio">Portfolio</a>
+      <a href="/panel/logout">Keluar</a>
     </div>
     <div class="grid">
       <div class="card"><div class="v">${vs.total}</div><div class="l">Total (non-bot)</div></div>
@@ -258,11 +258,11 @@ router.get('/messages', authGuard, (req, res) => {
       <td style="max-width:340px;white-space:pre-wrap;word-break:break-word;font-size:.875rem">${escHtml(m.message || '')}</td>
       <td>
         <span class="badge">${m.is_read ? 'Dibaca' : 'Baru'}</span>
-        ${m.is_read ? '' : `<form method="POST" action="/admin/messages/${escHtml(m.id)}/read" style="margin-top:.4rem"><button class="btn" type="submit" style="padding:.3rem .6rem;font-size:.78rem">Tandai dibaca</button></form>`}
+        ${m.is_read ? '' : `<form method="POST" action="/panel/messages/${escHtml(m.id)}/read" style="margin-top:.4rem"><button class="btn" type="submit" style="padding:.3rem .6rem;font-size:.78rem">Tandai dibaca</button></form>`}
       </td>
       <td style="font-size:.78rem;white-space:nowrap">${escHtml(formatWIB(m.visited_at || ''))}<br>${escHtml(m.ip_address || '')}</td>
       <td style="white-space:nowrap">
-        <form method="POST" action="/admin/messages/${escHtml(m.id)}/delete" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus pesan ini?')">
+        <form method="POST" action="/panel/messages/${escHtml(m.id)}/delete" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus pesan ini?')">
           <button class="btn" type="submit" style="padding:.3rem .6rem;font-size:.78rem;background:#b91c1c">Hapus</button>
         </form>
       </td>
@@ -271,11 +271,11 @@ router.get('/messages', authGuard, (req, res) => {
   res.send(layout('Pesan Masuk', `
     <h2>Pesan Masuk</h2>
     <div class="nav">
-      <a href="/admin/dashboard">Dashboard</a>
-      <a href="/admin/visitors">Pengunjung</a>
-      <a href="/admin/messages">Pesan</a>
-      <a href="/admin/portfolio">Portfolio</a>
-      <a href="/admin/logout">Keluar</a>
+      <a href="/panel/dashboard">Dashboard</a>
+      <a href="/panel/visitors">Pengunjung</a>
+      <a href="/panel/messages">Pesan</a>
+      <a href="/panel/portfolio">Portfolio</a>
+      <a href="/panel/logout">Keluar</a>
     </div>
     ${takeFlash(req)}
     <table><thead><tr><th>Pengirim</th><th>Subjek</th><th>Pesan</th><th>Status</th><th>Waktu / IP</th><th style="width:110px">Aksi</th></tr></thead><tbody>${rows}</tbody></table>`));
@@ -284,13 +284,13 @@ router.get('/messages', authGuard, (req, res) => {
 router.post('/messages/:id/read', authGuard, (req, res) => {
   markMessageRead(req.params.id);
   setFlash(req, 'success', 'Pesan ditandai sudah dibaca.');
-  res.redirect('/admin/messages');
+  res.redirect('/panel/messages');
 });
 
 router.post('/messages/:id/delete', authGuard, (req, res) => {
   const ok = deleteMessage(req.params.id);
   setFlash(req, ok ? 'success' : 'error', ok ? 'Pesan berhasil dihapus.' : 'Pesan tidak ditemukan.');
-  res.redirect('/admin/messages');
+  res.redirect('/panel/messages');
 });
 
 // --- Portfolio: daftar ---
@@ -304,8 +304,8 @@ router.get('/portfolio', authGuard, (req, res) => {
       <td>${p.order}</td>
       <td style="font-size:.78rem;white-space:nowrap">${escHtml(formatWIB(p.created_at || ''))}</td>
       <td style="white-space:nowrap">
-        <a class="btn" href="/admin/portfolio/${p.id}/edit" style="padding:.3rem .6rem;font-size:.78rem">Edit</a>
-        <form method="POST" action="/admin/portfolio/${p.id}/delete" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus portfolio ini?')">
+        <a class="btn" href="/panel/portfolio/${p.id}/edit" style="padding:.3rem .6rem;font-size:.78rem">Edit</a>
+        <form method="POST" action="/panel/portfolio/${p.id}/delete" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus portfolio ini?')">
           <button class="btn" type="submit" style="padding:.3rem .6rem;font-size:.78rem;background:#b91c1c">Hapus</button>
         </form>
       </td>
@@ -314,14 +314,14 @@ router.get('/portfolio', authGuard, (req, res) => {
   res.send(layout('Portfolio', `
     <h2>Kelola Portfolio</h2>
     <div class="nav">
-      <a href="/admin/dashboard">Dashboard</a>
-      <a href="/admin/visitors">Pengunjung</a>
-      <a href="/admin/messages">Pesan</a>
-      <a href="/admin/portfolio">Portfolio</a>
-      <a href="/admin/logout">Keluar</a>
+      <a href="/panel/dashboard">Dashboard</a>
+      <a href="/panel/visitors">Pengunjung</a>
+      <a href="/panel/messages">Pesan</a>
+      <a href="/panel/portfolio">Portfolio</a>
+      <a href="/panel/logout">Keluar</a>
     </div>
     ${takeFlash(req)}
-    <p><a class="btn" href="/admin/portfolio/create">+ Tambah Portfolio</a></p>
+    <p><a class="btn" href="/panel/portfolio/create">+ Tambah Portfolio</a></p>
     <table><thead><tr><th>Judul</th><th>Status</th><th>Unggulan</th><th>Urutan</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table>`));
 });
 
@@ -330,12 +330,12 @@ router.get('/portfolio/create', authGuard, (req, res) => {
   res.send(layout('Tambah Portfolio', `
     <h2>Tambah Portfolio</h2>
     <div class="nav">
-      <a href="/admin/dashboard">Dashboard</a>
-      <a href="/admin/portfolio">Portfolio</a>
-      <a href="/admin/logout">Keluar</a>
+      <a href="/panel/dashboard">Dashboard</a>
+      <a href="/panel/portfolio">Portfolio</a>
+      <a href="/panel/logout">Keluar</a>
     </div>
     ${takeFlash(req)}
-    ${portfolioForm({}, '/admin/portfolio', 'Simpan')}`));
+    ${portfolioForm({}, '/panel/portfolio', 'Simpan')}`));
 });
 
 // --- Portfolio: simpan ---
@@ -343,47 +343,47 @@ router.post('/portfolio', authGuard, (req, res) => {
   const errors = validatePortfolio(req.body || {});
   if (errors.length) {
     setFlash(req, 'error', errors.join(' '));
-    return res.redirect('/admin/portfolio/create');
+    return res.redirect('/panel/portfolio/create');
   }
   createPortfolio(normalizePortfolio(req.body || {}));
   setFlash(req, 'success', 'Portfolio berhasil ditambahkan.');
-  res.redirect('/admin/portfolio');
+  res.redirect('/panel/portfolio');
 });
 
 // --- Portfolio: form edit ---
 router.get('/portfolio/:id/edit', authGuard, (req, res) => {
   const p = findPortfolio(req.params.id);
-  if (!p) return res.status(404).send(layout('Tidak Ditemukan', '<h2>Portfolio tidak ditemukan</h2><p><a class="btn" href="/admin/portfolio">Kembali</a></p>'));
+  if (!p) return res.status(404).send(layout('Tidak Ditemukan', '<h2>Portfolio tidak ditemukan</h2><p><a class="btn" href="/panel/portfolio">Kembali</a></p>'));
   res.send(layout('Edit Portfolio', `
     <h2>Edit Portfolio</h2>
     <div class="nav">
-      <a href="/admin/dashboard">Dashboard</a>
-      <a href="/admin/portfolio">Portfolio</a>
-      <a href="/admin/logout">Keluar</a>
+      <a href="/panel/dashboard">Dashboard</a>
+      <a href="/panel/portfolio">Portfolio</a>
+      <a href="/panel/logout">Keluar</a>
     </div>
     ${takeFlash(req)}
-    ${portfolioForm(p, `/admin/portfolio/${p.id}`, 'Perbarui')}`));
+    ${portfolioForm(p, `/panel/portfolio/${p.id}`, 'Perbarui')}`));
 });
 
 // --- Portfolio: update ---
 router.post('/portfolio/:id', authGuard, (req, res) => {
   const p = findPortfolio(req.params.id);
-  if (!p) return res.redirect('/admin/portfolio');
+  if (!p) return res.redirect('/panel/portfolio');
   const errors = validatePortfolio(req.body || {});
   if (errors.length) {
     setFlash(req, 'error', errors.join(' '));
-    return res.redirect(`/admin/portfolio/${p.id}/edit`);
+    return res.redirect(`/panel/portfolio/${p.id}/edit`);
   }
   updatePortfolio(p.id, normalizePortfolio(req.body || {}));
   setFlash(req, 'success', 'Portfolio berhasil diperbarui.');
-  res.redirect('/admin/portfolio');
+  res.redirect('/panel/portfolio');
 });
 
 // --- Portfolio: hapus ---
 router.post('/portfolio/:id/delete', authGuard, (req, res) => {
   deletePortfolio(req.params.id);
   setFlash(req, 'success', 'Portfolio berhasil dihapus.');
-  res.redirect('/admin/portfolio');
+  res.redirect('/panel/portfolio');
 });
 
 module.exports = router;

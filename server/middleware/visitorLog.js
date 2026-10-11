@@ -1,5 +1,5 @@
 /**
- * Middleware: catat setiap request publik (GET, non-asset, non-admin)
+ * Middleware: catat setiap request publik (GET, non-asset, non-panel)
  * ke storage/logs/visitors.jsonl — append-only.
  */
 const { getClientIp, cleanReferrer } = require('../utils/helpers');
@@ -9,9 +9,9 @@ const { appendVisitorLog } = require('../utils/visitorLog');
 module.exports = function visitorLog(req, res, next) {
   const p = req.path || '';
   const isAsset = p.startsWith('/assets/') || p.startsWith('/favicon');
-  const isAdmin = p.startsWith('/admin');
+  const isPanel = p.startsWith('/panel');
 
-  if (req.method === 'GET' && !isAsset && !isAdmin) {
+  if (req.method === 'GET' && !isAsset && !isPanel) {
     const ua = req.get('User-Agent') || '';
     appendVisitorLog({
       ip_address: getClientIp(req),

@@ -532,7 +532,7 @@ input.error, textarea.error, select.error {
     width: 100%;
 }
 
-.admin-link {
+.panel-link {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
 }

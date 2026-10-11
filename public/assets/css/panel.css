@@ -1,5 +1,5 @@
 /* ========================================
-   ADMIN STYLES
+   PANEL STYLES
    ======================================== */
 
 :root {
@@ -42,9 +42,9 @@ body {
 }
 
 /* ========================================
-   ADMIN LAYOUT
+   PANEL LAYOUT
    ======================================== */
-.admin-layout {
+.panel-layout {
     display: grid;
     grid-template-columns: var(--sidebar-width) 1fr;
     min-height: 100vh;
@@ -173,7 +173,7 @@ body {
 /* ========================================
    LOGIN PAGE
    ======================================== */
-.admin-login-wrapper {
+.panel-login-wrapper {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -182,7 +182,7 @@ body {
     background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-primary-light) 100%);
 }
 
-.admin-login-card {
+.panel-login-card {
     width: 100%;
     max-width: 420px;
     background: var(--color-bg-card);
@@ -379,7 +379,7 @@ body {
 }
 
 /* ========================================
-   FORMS (ADMIN)
+   FORMS (PANEL)
    ======================================== */
 .portfolio-form-page {
     max-width: 900px;
@@ -533,10 +533,10 @@ body {
 }
 
 /* ========================================
-   RESPONSIVE ADMIN
+   RESPONSIVE PANEL
    ======================================== */
 @media (max-width: 1024px) {
-    .admin-layout {
+    .panel-layout {
         grid-template-columns: 1fr;
     }
     
