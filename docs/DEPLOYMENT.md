@@ -42,7 +42,7 @@ npm install --omit=dev
 Dependencies (dari `package.json`):
 - `express` — web framework
 - `express-rate-limit` — rate limiting
-- `express-session` — admin session
+- `express-session` — panel session
 - `bcryptjs` — password hashing
 - `multer` — file upload (portfolio image)
 - `ua-parser-js` — device detection
@@ -66,11 +66,11 @@ PORT=3000
 HOST=0.0.0.0
 LAN_IP=YOUR_LAN_IP
 
-# Admin Auth
-ADMIN_USER=admin@example.com
-# ADMIN_PASS=YOUR_ADMIN_PASSWORD  (plain text — akan di-hash bcrypt di login)
+# Panel Auth
+PANEL_USER=panel@example.com
+# PANEL_PASS=YOUR_PANEL_PASSWORD  (plain text — akan di-hash bcrypt di login)
 # ATAU generate hash: node -e "console.log(require('bcryptjs').hashSync('PASSWORD_BARU'))"
-# Lalu isi ADMIN_PASS_HASH=$2y$10$... (server.js cek ADMIN_PASS dulu, fallback ke hash)
+# Lalu isi PANEL_PASS_HASH=$2y$10$... (server.js cek PANEL_PASS dulu, fallback ke hash)
 
 # Session
 SESSION_SECRET=ganti-dengan-string-random-32-char-min
@@ -220,7 +220,7 @@ sudo chown -R gigih:gigih .
 
 ---
 
-## 9. Ganti Password Admin (Wajib Setelah Login Pertama)
+## 9. Ganti Password Panel (Wajib Setelah Login Pertama)
 
 ```bash
 # Generate hash baru
@@ -228,13 +228,13 @@ node -e "console.log(require('bcryptjs').hashSync('PASSWORD_BARU_YANG_KUAT'))"
 # Output contoh: $2y$10$AbCdEfGh...
 
 # Update .env
-# ADMIN_PASS_HASH=$2y$10$AbCdEfGh...  (server.js prioritas cek ADMIN_PASS_HASH)
+# PANEL_PASS_HASH=$2y$10$AbCdEfGh...  (server.js prioritas cek PANEL_PASS_HASH)
 ```
 
-Atau via MySQL (jika tabel admins dipakai):
+Atau via MySQL (jika tabel users dipakai):
 ```bash
 mysql -u gigih -p personal_branding -e "
-UPDATE admins SET password = '\$2y\$10\$AbCdEfGh...' WHERE email = 'admin@example.com';
+UPDATE users SET password = '\$2y\$10\$AbCdEfGh...' WHERE email = 'panel@example.com';
 "
 ```
 
@@ -320,7 +320,7 @@ chmod +x ~/backup.sh
 - [ ] VM firewall izinkan port 3000 dari subnet LXC
 - [ ] `systemctl --user status personal-branding` → `active (running)`
 - [ ] Semua halaman publik load 200: `/`, `/about`, `/portfolio`, `/contact`
-- [ ] Admin login & dashboard akses 200
+- [ ] Panel login & dashboard akses 200
 - [ ] Form kontak kirim → masuk `storage/logs/messages.jsonl`
 - [ ] Upload gambar portfolio < 2MB → tampil di `/portfolio`
 - [ ] Tema gelap/terang ikut OS/browser (auto)

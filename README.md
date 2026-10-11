@@ -11,8 +11,8 @@ Website personal branding untuk Gigih Yanuar Prabawa — IT Support Specialist.
 | Area | Teknologi |
 |------|-----------|
 | **Server runtime** | Node.js v24 + Express.js (file `server.js`) |
-| **Admin session** | `express-session` (file store) |
-| **Router & routes** | `server/routes/public.js` + `server/routes/admin.js` |
+| **Panel session** | `express-session` (file store) |
+| **Router & routes** | `server/routes/public.js` + `server/routes/panel.js` |
 | **Helpers** | `src/Core/helpers.php` (PHP fitur helper), `server/utils/*.js` |
 | **Data storage** | `storage/logs/*.jsonl` (messages, portfolios, visitors) |
 | **Frontend** | HTML di `src/View/`, CSS/JS di `public/assets/` |
@@ -46,15 +46,15 @@ personal-branding/
 │   │   ├── contact.html        # Form kontak
 │   │   └── layouts/app.php     # Layout utama (footer, theme toggle)
 │   └── Controller/             # Idle (PHP) — tidak dipakai saat ini
-│       └── AdminController.php
+│       └── PanelController.php
 ├── server/
 │   ├── app.js                  # Entry: load .env → createApp() → listen()
 │   ├── routes/
 │   │   ├── public.js           # Route publik: /, /about, /portfolio, /contact
-│   │   ├── admin.js            # Route admin: login, dashboard, portfolio CRUD, messages
+│   │   ├── panel.js            # Route admin: login, dashboard, portfolio CRUD, messages
 │   │   └── errors.js           # 404 & 500 handler
 │   ├── middleware/
-│   │   ├── auth.js             # authGuard cek session adminLoggedIn
+│   │   ├── auth.js             # authGuard cek session panelLoggedIn
 │   │   └── visitorLog.js       # Log visitor stats (JSONL)
 │   └── utils/
 │       ├── helpers.js          # parseDevice(), friendlyAndroidModel(), escHtml()
@@ -64,8 +64,8 @@ personal-branding/
 ├── storage/
 │   ├── logs/
 │   │   ├── visitors.jsonl      # Log kunjungan (auto diisi server)
-│   │   ├── messages.jsonl      # Pesan masuk (dapat di-admin hapus)
-│   │   └── portfolio.jsonl     # Portfolio (dapat di-admin CRUD)
+│   │   ├── messages.jsonl      # Pesan masuk (dapat dihapus via panel)
+│   │   └── portfolio.jsonl     # Portfolio (dapat CRUD via panel)
 │   └── cache/                  # Cache files (bisa dibersihkan)
 ├── composer.json               # PHP composer — idle, tidak dipakai runtime
 ├── package.json                # Dependencies Node.js (express, bcrypt, rate-limit, ua-parser-js)
@@ -86,7 +86,7 @@ npm install  # atau: npm ci
 
 # 3. Setup file .env (copy dari .env.example)
 cp .env.example .env
-# Edit .env jika butuh sesuaikan port, DB, admin cred
+# Edit .env jika butuh sesuaikan port, DB, panel cred
 
 # 4. Jalankan server Node.js (preview/production)
 npm start   # atau: node server.js
@@ -96,8 +96,8 @@ npm start   # atau: node server.js
 #   Network: http://YOUR_LAN_IP:3000 (LAN)
 #   Tunnel:  https://gigihgyp.my.id (via Cloudflare Zero Trust)
 
-# 6. Login Admin (di halaman /admin/login)
-#   Email: admin@example.com
+# 6. Login panel (path rahasia, lihat .env)
+#   Email: panel@example.com
 #   Password: YOUR_DB_PASSWORD  (default dari .env.example, ganti dulu!)
 ```
 
@@ -121,10 +121,10 @@ sha256sum ~/backups/db-$DATE.sql ~/backups/files-$DATE.tar.gz
 
 ## 🛠️ Development — Menambah Fitur
 
-### Menambah Portfolio Baru (via Admin)
+### Menambah Portfolio Baru (via Panel)
 
-1. Buka `https://gigihgyp.my.id/admin/login`
-2. Login dengan kredensial admin
+1. Buka `https://gigihgyp.my.id/panel/login (path rahasia)`
+2. Login dengan kredensial panel
 3. Klik **Portfolio** → **+ Tambah Portfolio**
 4. Isi form: Judul, Slug, Deskripsi, Teknologi, URL, Gambar (max 2MB)
 5. Status: `Published` atau `Draft`
@@ -135,7 +135,7 @@ sha256sum ~/backups/db-$DATE.sql ~/backups/files-$DATE.tar.gz
 1. Buka `/contact`
 2. Isi: Nama, Email, Subjek, Pesan
 3. Klik **Kirim Pesan** → data ke `storage/logs/messages.jsonl`
-4. Di admin `/admin/messages` → bisa dilihat, ditandai baca, atau dihapus
+4. Di panel `/panel/messages` → bisa dilihat, ditandai baca, atau dihapus
 
 ### Menambah Validasi di Form
 
@@ -145,9 +145,9 @@ Semua validasi dijalankan server-side di `server/routes/public.js`. Client-side 
 
 ## 🛠️ Maintenance & Troubleshooting
 
-### Menghapus Pesan di Admin
+### Menghapus Pesan di Panel
 
-1. Buka `/admin/messages` (butuh login admin)
+1. Buka `/panel/messages` (butuh login panel)
 2. Temukan pesan yang ingin dihapus
 3. Klik tombol **Hapus** (icon tangות)
 4. Konfirmasi `Yakin ingin menghapus pesan ini?`
@@ -173,13 +173,13 @@ netstat -tlnp | grep 3000
 systemctl --user restart personal-branding
 ```
 
-### Lupa password admin
+### Lupa password panel
 
 ```bash
 # Edit .env lalu restart service
 # Atau langsung ke DB
 mysql -u your_db_user -pYOUR_DB_PASSWORD personal_branding -e "
-UPDATE admins SET password = '\$2y\$10\$NEWHASH...' WHERE email = 'admin@example.com';
+UPDATE users SET password = '\$2y\$10\$NEWHASH...' WHERE email = 'panel@example.com';
 "
 # Atau generate hash: node -e "console.log(require('bcryptjs').hashSync('PASSWORD_BARU'))"
 ```

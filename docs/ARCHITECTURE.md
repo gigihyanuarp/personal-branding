@@ -10,7 +10,7 @@ Personal branding website sederhana untuk Gigih Yanuar Prabawa (IT Support Speci
 | Layer | Teknologi |
 |-------|-----------|
 | **Server** | Node.js 24 + Express.js (`server.js` → `server/app.js`) |
-| **Admin Auth** | `express-session` (MemoryStore) + bcrypt password |
+| **Panel Auth** | `express-session` (MemoryStore) + bcrypt password |
 | **Rate Limit** | `express-rate-limit` (100 req / 15 min per IP) |
 | **Data Storage** | JSONL files di `storage/logs/` (messages, portfolios, visitors) |
 | **Device Detection** | `ua-parser-js` (UAParser) — output: type, category, detail, vendor, model, os, osVersion, browser, browserVersion |
@@ -45,7 +45,7 @@ personal-branding/
 │   ├── app.js                  # Entry modular: middleware, routes, error handlers
 │   ├── routes/
 │   │   ├── public.js           # Route publik (/, /about, /portfolio, /contact)
-│   │   ├── admin.js            # Route admin (login, dashboard, CRUD)
+│   │   ├── panel.js            # Route panel (login, dashboard, CRUD)
 │   │   └── errors.js           # 404 & 500 handler
 │   ├── middleware/
 │   │   ├── auth.js             # authGuard, guestOnly
@@ -58,8 +58,8 @@ personal-branding/
 ├── storage/
 │   └── logs/
 │       ├── visitors.jsonl      # Auto-diisi server
-│       ├── messages.jsonl      # Form kontak + admin
-│       └── portfolio.jsonl     # Admin CRUD
+│       ├── messages.jsonl      # Form kontak + panel
+│       └── portfolio.jsonl     # Panel CRUD
 ├── composer.json               # PHP dependencies (idle)
 ├── package.json                # Node.js dependencies
 ├── .env.example
@@ -72,7 +72,7 @@ personal-branding/
 
 | Fitur | Implementasi |
 |-------|--------------|
-| **Password hashing** | bcrypt (via `bcryptjs`) di admin login |
+| **Password hashing** | bcrypt (via `bcryptjs`) di panel login |
 | **Session** | `express-session` + `httpOnly`, `sameSite=lax`, 24h maxAge |
 | **Rate limiting** | 100 req / 15 min per IP (express-rate-limit) |
 | **XSS Protection** | `escHtml()` → `htmlspecialchars(..., ENT_QUOTES \| ENT_SUBSTITUTE, 'UTF-8')` di server utils |
@@ -88,19 +88,19 @@ personal-branding/
 ```
 Request → visitorLog middleware → parseDevice(UA) → append visitors.jsonl
 ```
-Hanya GET non-asset non-admin yang dilog. Bot (UA mengandung bot/crawler) di-skip.
+Hanya GET non-asset non-panel yang dilog. Bot (UA mengandung bot/crawler) di-skip.
 
 ### Contact Form
 ```
 POST /contact → validate → append messages.jsonl → redirect /contact?sent=1 (atau JSON)
 ```
 
-### Portfolio CRUD (Admin)
+### Portfolio CRUD (Panel)
 ```
-GET    /admin/portfolio          → readPortfolios() → render table
-POST   /admin/portfolio          → validate + normalize → createPortfolio()
-POST   /admin/portfolio/:id      → validate + normalize → updatePortfolio()
-POST   /admin/portfolio/:id/delete → deletePortfolio()
+GET    /panel/portfolio          → readPortfolios() → render table
+POST   /panel/portfolio          → validate + normalize → createPortfolio()
+POST   /panel/portfolio/:id      → validate + normalize → updatePortfolio()
+POST   /panel/portfolio/:id/delete → deletePortfolio()
 ```
 
 ### Portfolio Detail (Publik)
@@ -152,7 +152,7 @@ LXC: cloudflared  ──(LAN)──►  VM: YOUR_LAN_IP:3000 (Node.js — person
 
 ## Code Organization Principles
 
-1. **Modular routes** — `public.js` & `admin.js` pisah, register di `app.js`
+1. **Modular routes** — `public.js` & `panel.js` pisah, register di `app.js`
 2. **Utils terpisah** — `helpers.js`, `portfolioLog.js`, `messageLog.js`, `visitorLog.js`
 3. **Middleware ringan** — `auth.js` (authGuard), `visitorLog.js` (stats)
 3. **Template rendering** — `readView()` baca `src/View/*.html`, `renderPage()` / `renderPortfolioDetail()` sisipkan data

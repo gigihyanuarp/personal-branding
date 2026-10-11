@@ -50,24 +50,24 @@ Runtime aktif: **Node.js (Express)** — file `server.js` entry point. PHP & MyS
 
 ---
 
-## Admin Routes (Require Session Auth — `express-session`)
+## Panel Routes (Require Session Auth — `express-session`)
 
 | Route | Method | Handler | Deskripsi |
 |-------|--------|---------|-----------|
-| `/admin/login` | GET | `admin.js` | Form login |
-| `/admin/login` | POST | `admin.js` | Proses login (bcrypt), set `session.adminLoggedIn=true` |
-| `/admin/logout` | GET | `admin.js` | Destroy session, redirect `/admin/login` |
-| `/admin/dashboard` | GET | `admin.js` | Dashboard: stats visitors, messages, portfolio counts |
-| `/admin/visitors` | GET | `admin.js` | Visitor stats: total, today, daily 30 hari, 20 terakhir |
-| `/admin/messages` | GET | `admin.js` | List pesan (sort: unread dulu, created_at desc) |
-| `/admin/messages/:id/read` | POST | `admin.js` | Tandai pesan dibaca (flash success) |
-| `/admin/messages/:id/delete` | POST | `admin.js` | **Hapus pesan** dari JSONL (flash success/error) |
-| `/admin/portfolio` | GET | `admin.js` | List portfolio (semua status, pakai `readPortfolios()`) |
-| `/admin/portfolio/create` | GET | `admin.js` | Form create portfolio |
-| `/admin/portfolio` | POST | `admin.js` | Simpan portfolio baru (validasi URL, flash) |
-| `/admin/portfolio/:id/edit` | GET | `admin.js` | Form edit portfolio |
-| `/admin/portfolio/:id` | POST | `admin.js` | Update portfolio (validasi URL, flash) |
-| `/admin/portfolio/:id/delete` | POST | `admin.js` | Hapus portfolio (flash) |
+| `/panel/login` | GET | `panel.js` | Form login |
+| `/panel/login` | POST | `panel.js` | Proses login (bcrypt), set `session.panelLoggedIn=true` |
+| `/panel/logout` | GET | `panel.js` | Destroy session, redirect `/panel/login` |
+| `/panel/dashboard` | GET | `panel.js` | Dashboard: stats visitors, messages, portfolio counts |
+| `/panel/visitors` | GET | `panel.js` | Visitor stats: total, today, daily 30 hari, 20 terakhir |
+| `/panel/messages` | GET | `panel.js` | List pesan (sort: unread dulu, created_at desc) |
+| `/panel/messages/:id/read` | POST | `panel.js` | Tandai pesan dibaca (flash success) |
+| `/panel/messages/:id/delete` | POST | `panel.js` | **Hapus pesan** dari JSONL (flash success/error) |
+| `/panel/portfolio` | GET | `panel.js` | List portfolio (semua status, pakai `readPortfolios()`) |
+| `/panel/portfolio/create` | GET | `panel.js` | Form create portfolio |
+| `/panel/portfolio` | POST | `panel.js` | Simpan portfolio baru (validasi URL, flash) |
+| `/panel/portfolio/:id/edit` | GET | `panel.js` | Form edit portfolio |
+| `/panel/portfolio/:id` | POST | `panel.js` | Update portfolio (validasi URL, flash) |
+| `/panel/portfolio/:id/delete` | POST | `panel.js` | Hapus portfolio (flash) |
 
 ---
 
@@ -132,9 +132,9 @@ PORT=3000
 HOST=0.0.0.0
 LAN_IP=YOUR_LAN_IP
 
-# Admin Auth (bcrypt hash di .env.example hanya placeholder)
-ADMIN_USER=admin@example.com
-ADMIN_PASS=YOUR_ADMIN_PASSWORD
+# Panel Auth (bcrypt hash di .env.example hanya placeholder)
+PANEL_USER=panel@example.com
+PANEL_PASS=YOUR_PANEL_PASSWORD
 
 # Session
 SESSION_SECRET=your-session-secret
@@ -164,7 +164,7 @@ DB_PASSWORD=YOUR_DB_PASSWORD
 - Cookie: `connect.sid`
 - Lifetime: 24 jam (`maxAge: 24 * 60 * 60 * 1000`)
 - HttpOnly, SameSite=lax
-- Guard: `authGuard` middleware cek `req.session.adminLoggedIn === true`
+- Guard: `authGuard` middleware cek `req.session.panelLoggedIn === true`
 
 ---
 
